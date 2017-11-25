@@ -104,6 +104,10 @@ func _fixed_process(delta):
 	moveLeft = Input.is_action_pressed("ui_left")
 	eat = Input.is_action_pressed("ui_accept")
 	
+	#if the amount of food reaches zero, the player dies by starvation
+	if Game.food == 0:
+		die("starvation")
+	
 	#checks if the player is moving
 	isMoving = moveLeft or moveRight or moveUp or moveDown or eat
 	#resets the direction
@@ -121,11 +125,13 @@ func _fixed_process(delta):
 		#Prints the ray information
 		#raycastPrint()
 		
+		#!!! VERY NICE ALTERNATIVE TO SIGNALS !!!
 		#This calls the "movement" function on ALL nodes in the "enemy" group
 		get_tree().call_group(0, "enemy", "movement", self)
 	
 	#Checks in which direction the player is moving
 	#the "and pos ..." ensures that the player may only move once the previous movement has ended
+		###UP#####
 		if moveUp and pos == newPos:
 			direction = UP
 			
@@ -137,80 +143,106 @@ func _fixed_process(delta):
 				Game.food -= 1
 				#Emits a signal to update the food label
 				emit_signal("foodChanged", Game.food)
+				#Plays the movement sound from the AudioPlayer
+				AudioPlayer.play("scavengers_footstep")
 			#If the item in the way is food, the player can still move
 			elif rayUp.obstacle == "Food":
+				#Simply moves the player without subtracting food
 				newPos = (pos + (direction * 32))
+				#Plays the movement sound from the AudioPlayer
+				AudioPlayer.play("scavengers_footstep")
 			#If the item is a wall, the player hits it
 			elif rayUp.obstacle == "Wall":
 				Game.food -= 1
 				#Emits a signal to update the food label
 				emit_signal("foodChanged", Game.food)
+				#Plays the player's chopping animation
 				anim.play("Attack")
+				#Tells the object hit by the raycast in question to call the dakeDamage func
 				raycastUp.takeDamage()
+				#Plays the chopping sound from the AudioPlayer
+				AudioPlayer.play("scavengers_chop")
 			#If the obstacle is an enemy, attack him
 			elif rayUp.obstacle == "Enemy":
 				#plays the attack animation
 				anim.play("Attack")
 				#calls the takeDamage func on the enemy
 				raycastUp.takeDamage()
+				#Plays the chopping sound from the AudioPlayer
+				AudioPlayer.play("scavengers_chop")
 			#if the path is blocked, print what blocked the path
 			else:
 				print("Path blocked by " + str(rayUp.obstacle))
 
+		###DOWN#####
 		elif moveDown and pos == newPos:
 			direction = DOWN
 			if rayDown.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
+				AudioPlayer.play("scavengers_footstep")
 			elif rayDown.obstacle == "Food":
 				newPos = (pos + (direction * 32))
+				AudioPlayer.play("scavengers_footstep")
 			elif rayDown.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastDown.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			elif rayDown.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastDown.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			else:
 				print("Path blocked by " + str(rayDown.obstacle))
 		
+		###LEFT#####
 		elif moveLeft and pos == newPos:
 			direction = LEFT
 			if rayLeft.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
+				AudioPlayer.play("scavengers_footstep")
 			elif rayLeft.obstacle == "Food":
 				newPos = (pos + (direction * 32))
+				AudioPlayer.play("scavengers_footstep")
 			elif rayLeft.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastLeft.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			elif rayLeft.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastLeft.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			else:
 				print("Path blocked by " + str(rayLeft.obstacle))
 		
+		###RIGHT#####
 		elif moveRight and pos == newPos:
 			direction = RIGHT
 			if rayRight.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
+				AudioPlayer.play("scavengers_footstep")
 			elif rayRight.obstacle == "Food":
 				newPos = (pos + (direction * 32))
+				AudioPlayer.play("scavengers_footstep")
 			elif rayRight.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastRight.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			elif rayRight.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastRight.takeDamage()
+				AudioPlayer.play("scavengers_chop")
 			else:
 				print("Path blocked by " + str(rayRight.obstacle))
 	
@@ -223,6 +255,9 @@ func _fixed_process(delta):
 			#removes 50 food from the player and adds on HP
 			Game.food -= 50
 			Game.playerHP += 1
+			#Plays the fruit sound effect from the Audio Player
+			AudioPlayer.play("scavengers_fruit")
+
 			#Tells the UI to update the health bar and food counter
 			#!!! THIS FUNCTION IS REALLY AWESOME PLEASE REMEMBER THIS !!!
 			#Args: 0, groupName, funcName, variables
@@ -257,6 +292,8 @@ func raycastFunc(x, y, z):
 			z.obstacle = "Enemy"
 		elif y.is_in_group("Food"):
 			z.obstacle = "Food"
+		elif y.is_in_group("Weapons"):
+			z.obstacle = "Weapon"
 	
 	#if it hasn't collided with anything, the obstacle is set to none
 	else:

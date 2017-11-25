@@ -13,14 +13,21 @@ var weaponPickaxe = {
     dmg = 1,			#the damage it does to enemies
     mine = 1,			#the mining damage - damage to blocks
     rng = 1,			#its range
-    dur = -1			#its durability - how many times it can be used before it breaks
+    dur = 30			#its durability - how many times it can be used before it breaks
 }
 var weaponKnife = {
     name = "knife",
+    dmg = 1,
+    mine = 0.5,
+    rng = 1,
+    dur = 10
+}
+var weaponMachete = {
+    name = "machete",
     dmg = 2,
     mine = 0.5,
     rng = 1,
-    dur = 5
+    dur = 10
 }
 var weaponCrossbow = {
     name = "crossbow",
@@ -30,7 +37,7 @@ var weaponCrossbow = {
     dur = -1
 }
 #A database of all weapons
-var weaponDB = [weaponPickaxe, weaponKnife, weaponCrossbow]
+var weaponDB = [weaponPickaxe, weaponKnife, weaponMachete, weaponCrossbow]
 #The player's current weapon
 var playerWeapon
 
@@ -40,5 +47,5 @@ func _ready():
 		playerHP = 4
 		food = 150
 		playerWeapon = weaponDB[0]
-		print(playerWeapon.name)
+		#print(playerWeapon.name)
 

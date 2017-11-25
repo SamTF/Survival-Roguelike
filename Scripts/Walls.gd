@@ -24,7 +24,7 @@ func _ready():
 
 func takeDamage():
 	#Gets the damage of the player's current weapon and adds it as damage to the wall
-	damage += Game.playerWeapon.dmg
+	damage += Game.playerWeapon.mine
 	#decreases the opacity by one third per hit
 	opacity -= 0.3
 	wall.set_opacity(opacity)

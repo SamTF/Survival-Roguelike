@@ -148,20 +148,27 @@ func movement(x):
 		#Plays the attacked animation on the player
 		player.anim.play("Attacked")
 	
-	#This is used to prevent the player from being attacked twice in a row
-	yield(utils.create_timer(1), "timeout")
-	#re-enables the enemy's ability to attack after the previous attack is over
-	canAttack = true
-	#States that the player is no longer being attacked
-	player.isAttacked = false
+		#This is used to prevent the player from being attacked twice in a row
+		yield(utils.create_timer(1), "timeout")
+		#re-enables the enemy's ability to attack after the previous attack is over
+		canAttack = true
+		#States that the player is no longer being attacked
+		player.isAttacked = false
 
 func attack():
+	#Play's the enemy's attack animation
 	anim.play("Attack")
+	#Plays the enemy sound effect from the Audio Player
+	AudioPlayer.play("scavengers_enemy")
+	#Flashes the Player attacked sprite
+	get_tree().call_group(0, "UI", "attacked")
 
 #Triggers when the enemy is attacked
 func takeDamage():
 	#Gets the damage of the player's current weapon and substracts that from the enemy's HP
 	health -= Game.playerWeapon.dmg
+	#Plays the enemy sound effect from the Audio Player
+	AudioPlayer.play("scavengers_enemy")
 	#if the enemy's HP is bigger than 0 it fades a bit
 	if health > 0:
 		set_opacity(0.5)

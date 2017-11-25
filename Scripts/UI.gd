@@ -1,5 +1,5 @@
 #This script controls all the UI functions
-extends Control
+extends Node2D
 
 #Loads the food label
 onready var foodText = get_node("LabelFood")
@@ -14,7 +14,10 @@ onready var player = utils.main_node.get_node("Player")
 #Loads the Death Screen nodes
 onready var level = get_node("Death Screen").get_node("LabelLevel")
 onready var death = get_node("Death Screen").get_node("LabelDeath")
-var fadeOpacity = 0
+onready var deathAnim = get_node("Death Screen").get_node("BlackScreen/AnimationPlayer")
+#Loads the Attcked nodes
+onready var attackedAnim = get_node("Attacked/Sprite/AnimationPlayer")
+
 
 func _ready():
 	#Sets all the UI stuff to their respective values to prevent them from resetting
@@ -45,7 +48,8 @@ func _on_level_Changed(day):
 func deathScreen(x, y):
 	level.set_text("You survived for " + str(y) + " days")
 	death.set_text("You were killed by " + str(x))
-	#currently doesn't work
-	#while fadeOpacity != 1:
-	#	fadeOpacity += 0.01
-	#	sprite.set_opacity(fadeOpacity)
+	#This animation fades the screen slowly
+	deathAnim.play("fadeOut")
+
+func attacked():
+	attackedAnim.play("Flash")

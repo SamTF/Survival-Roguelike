@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://Scripts/UI.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/5₧5.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Sprites/Heart_SpriteSheet.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/black.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/claw_mark.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -25,12 +27,32 @@ font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="Animation" id=4]
 
-font/size = 10
-font/use_mipmaps = false
-font/use_filter = false
-font/font = ExtResource( 2 )
+resource/name = "fadeOut"
+length = 6.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 6 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:visibility/visible")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
 [sub_resource type="DynamicFont" id=5]
 
@@ -39,18 +61,45 @@ font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 2 )
 
-[node name="UI" type="Control" groups=[
+[sub_resource type="DynamicFont" id=6]
+
+font/size = 10
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 2 )
+
+[sub_resource type="Animation" id=7]
+
+resource/name = "Flash"
+length = 0.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/visible")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:visibility/opacity")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0, 0.3, 0.5 ),
+"transitions": FloatArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.8, 0.0, 0.0 ]
+}
+
+[node name="UI" type="Node2D" groups=[
 "UI",
 ]]
 
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 40.0
-margin/bottom = 40.0
+z/z = 10
 script/script = ExtResource( 1 )
 
 [node name="LabelFood" type="Label" parent="."]
@@ -124,6 +173,24 @@ margin/top = 8.0
 margin/right = 48.0
 margin/bottom = 48.0
 
+[node name="BlackScreen" type="Sprite" parent="Death Screen"]
+
+visibility/opacity = 0.0
+transform/pos = Vector2( -8, -8 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Death Screen/BlackScreen"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/fadeOut = SubResource( 4 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
+
 [node name="LabelLevel" type="Label" parent="Death Screen"]
 
 focus/ignore_mouse = true
@@ -134,7 +201,7 @@ margin/left = -8.0
 margin/top = 96.0
 margin/right = 248.0
 margin/bottom = 118.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
@@ -152,12 +219,42 @@ margin/left = -8.0
 margin/top = 136.0
 margin/right = 248.0
 margin/bottom = 150.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="Attacked" type="Control" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 40.0
+
+[node name="Sprite" type="Sprite" parent="Attacked"]
+
+visibility/opacity = 0.0
+transform/pos = Vector2( 128, 128 )
+transform/scale = Vector2( 1.33333, 1.33333 )
+texture = ExtResource( 5 )
+modulate = Color( 1, 0, 0, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Attacked/Sprite"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/Flash = SubResource( 7 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
 
 

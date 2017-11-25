@@ -2,6 +2,8 @@ extends Area2D
 
 #Loads the sprite
 onready var sprite = get_node("Sprite")
+#Loads the sprite animation player
+onready var anim = get_node("Sprite").get_node("AnimationPlayer")
 #Loads the Log label
 onready var logText = utils.main_node.get_node("UI").get_node("LabelLog")
 
@@ -19,10 +21,21 @@ func _on_area_enter( area ):
 		Game.food += 20
 		#Emits a signal to update the food label
 		area.emit_signal("foodChanged", Game.food)
+		#Tells the sprite to play the pickup animation
+		anim.play("pickup")
+		
+		#Plays the eating sound from the AudioPlayer
+		if sprite.get_frame() == 19:
+			#Plays the fruit sound effect if the fruit is the current frame
+			AudioPlayer.play("scavengers_fruit")
+		else:
+			AudioPlayer.play("scavengers_soda")
 		print("om nom nom")
+		
+		
 		#The following lines are used to remove the food from the map without crashing the fucking game
 		get_node("CollisionShape2D").queue_free()
-		set_opacity(0)
+		#set_opacity(0)
 		#Flashes the +food text
 		logText.set_text("+20 food")
 		yield(utils.create_timer(1), "timeout")

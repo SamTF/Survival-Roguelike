@@ -9,6 +9,7 @@ var outerWallScene = preload("res://Scenes/OuterWalls.tscn")
 var food = preload("res://Scenes/Food.tscn")
 var enemy1 = preload("res://Scenes/Enemy1.tscn")
 var enemy2 = preload("res://Scenes/Enemy2.tscn")
+var weapon = preload("res://Scenes/Weapons.tscn")
 
 export var columns = 8
 export var rows = 8

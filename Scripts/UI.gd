@@ -16,7 +16,7 @@ onready var level = get_node("Death Screen").get_node("LabelLevel")
 onready var death = get_node("Death Screen").get_node("LabelDeath")
 onready var deathAnim = get_node("Death Screen").get_node("BlackScreen/AnimationPlayer")
 #Loads the Attcked nodes
-onready var attackedAnim = get_node("Attacked/Sprite/AnimationPlayer")
+onready var attackedAnim = get_node("Attacked/Claws/AnimationPlayer")
 
 
 func _ready():
@@ -52,4 +52,7 @@ func deathScreen(x, y):
 	deathAnim.play("fadeOut")
 
 func attacked():
+	#Plays the claw animation
 	attackedAnim.play("Flash")
+	#Shakes the screen a bit - very immersive!
+	get_tree().call_group(0, "Camera", "shake", 8, 0.2)

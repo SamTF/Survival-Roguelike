@@ -162,6 +162,8 @@ func _fixed_process(delta):
 				raycastUp.takeDamage()
 				#Plays the chopping sound from the AudioPlayer
 				AudioPlayer.play("scavengers_chop")
+				#Shakes the screen a bit - very immersive!
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
 			#If the obstacle is an enemy, attack him
 			elif rayUp.obstacle == "Enemy":
 				#plays the attack animation
@@ -170,6 +172,8 @@ func _fixed_process(delta):
 				raycastUp.takeDamage()
 				#Plays the chopping sound from the AudioPlayer
 				AudioPlayer.play("scavengers_chop")
+				#Shakes the screen a bit - very immersive!
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
 			#if the path is blocked, print what blocked the path
 			else:
 				print("Path blocked by " + str(rayUp.obstacle))
@@ -177,72 +181,93 @@ func _fixed_process(delta):
 		###DOWN#####
 		elif moveDown and pos == newPos:
 			direction = DOWN
+			#None
 			if rayDown.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				AudioPlayer.play("scavengers_footstep")
+			#Food
 			elif rayDown.obstacle == "Food":
 				newPos = (pos + (direction * 32))
 				AudioPlayer.play("scavengers_footstep")
+			#Wall
 			elif rayDown.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastDown.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Enemy
 			elif rayDown.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastDown.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Else
 			else:
 				print("Path blocked by " + str(rayDown.obstacle))
 		
 		###LEFT#####
 		elif moveLeft and pos == newPos:
 			direction = LEFT
+			#None
 			if rayLeft.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				AudioPlayer.play("scavengers_footstep")
+			#Food
 			elif rayLeft.obstacle == "Food":
 				newPos = (pos + (direction * 32))
 				AudioPlayer.play("scavengers_footstep")
+			#Wall
 			elif rayLeft.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastLeft.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Enemy	
 			elif rayLeft.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastLeft.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Else
 			else:
 				print("Path blocked by " + str(rayLeft.obstacle))
 		
 		###RIGHT#####
 		elif moveRight and pos == newPos:
 			direction = RIGHT
+			#None
 			if rayRight.obstacle == "none":
 				newPos = (pos + (direction * 32))
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				AudioPlayer.play("scavengers_footstep")
+			#Food
 			elif rayRight.obstacle == "Food":
 				newPos = (pos + (direction * 32))
 				AudioPlayer.play("scavengers_footstep")
+			#Wall
 			elif rayRight.obstacle == "Wall":
 				Game.food -= 1
 				emit_signal("foodChanged", Game.food)
 				anim.play("Attack")
 				raycastRight.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Enemy
 			elif rayRight.obstacle == "Enemy":
 				anim.play("Attack")
 				raycastRight.takeDamage()
 				AudioPlayer.play("scavengers_chop")
+				get_tree().call_group(0, "Camera", "shake", 1, 0.13)
+			#Else
 			else:
 				print("Path blocked by " + str(rayRight.obstacle))
 	

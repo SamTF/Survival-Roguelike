@@ -9,6 +9,7 @@ var outerWallScene = preload("res://Scenes/OuterWalls.tscn")
 var food = preload("res://Scenes/Food.tscn")
 var enemy1 = preload("res://Scenes/Enemy1.tscn")
 var enemy2 = preload("res://Scenes/Enemy2.tscn")
+var enemy3 = preload("res://Scenes/Enemy3.tscn")
 var weapon = preload("res://Scenes/Weapons.tscn")
 
 export var columns = 8
@@ -118,12 +119,14 @@ func genEnemies(x):
 	for enemy in range(0, x):
 		
 		#50% chance for each type of enemy to show up
-		var enemyID = round(rand_range(1,2))
+		var enemyID = round(rand_range(1,3))
 
 		if enemyID == 1:
 			enemyInst = enemy1.instance()
-		else:
+		elif enemyID == 2:
 			enemyInst = enemy2.instance()
+		else:
+			enemyInst = enemy3.instance()
 		
 		var randomIndex = rand_range(0, gridPositions.size())		#the index of the pos from the gridPositions array
 		var pos = gridPositions[randomIndex]						#sets the enemy's pos to the random pos from the grid array

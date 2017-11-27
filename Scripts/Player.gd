@@ -61,9 +61,9 @@ signal healthChanged
 func _ready():
 	set_fixed_process(true)
 	#we need this two assings to prevent the player pos from resetting on game start
-	pos = Vector2(48, 208)
-	newPos = Vector2(48, 208)
-	set_pos(Vector2(48, 208))
+	pos = Vector2(32, 192)
+	newPos = Vector2(32, 192)
+	set_pos(Vector2(32, 192))
 	
 func _fixed_process(delta):
 	#Stores the current player position - very useful!
@@ -120,8 +120,8 @@ func _fixed_process(delta):
 		#raycastPrint()
 		
 		#!!! VERY NICE ALTERNATIVE TO SIGNALS !!!
-		#This calls the "movement" function on ALL nodes in the "enemy" group
-		get_tree().call_group(0, "enemy", "movement", self)
+		#This calls the "enemyTurn" function on ALL nodes in the "enemy" group
+		get_tree().call_group(0, "enemy", "enemyTurn", self)
 	
 	#Checks in which direction the player is moving
 	#the "and pos ..." ensures that the player may only move once the previous movement has ended

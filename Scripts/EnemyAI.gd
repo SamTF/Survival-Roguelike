@@ -43,16 +43,15 @@ var moveDir = 0
 var canAttack = true
 
 func _ready():
+	#The enemy type is equal to its frame - used to determine the AI type
 	EnemyType = get_node("Sprite").get_frame()
 	print("Enemy Type: " + str(EnemyType))
 	set_fixed_process(true)
 	pos = get_pos()
 	newPos = pos
 	
-	
-
 func _fixed_process(delta):
-	#Stores the current player position - very useful!
+	#Stores the current position - very useful!
 	pos = get_pos()
 	
 	#Checks if the rays are colliding
@@ -112,13 +111,17 @@ func raycastPrint():
 	print("LEFT: " + str(rayLeft.obstacle))
 
 #This func is called whenever the player moves
-func movement(x):
+func enemyTurn(x):
+	#Gets the player's position
+	var playerPos = player.get_pos()
+	#prints the raycast info
 	raycastPrint()
 	#waits for the player to be in position
 	yield(utils.create_timer(0.3), "timeout")
 
 	#Calls the move function depending on the type of enemy
-	if EnemyType == 12: move()
+	if EnemyType == 12: moveRand()
+	elif EnemyType == 55: moveStalk(pos, playerPos)
 
 	#If the player is beside the enemy, and the enemy can attack, and the player is alive, and the player has finished being attacked, the enemy will attack the player
 	if rayUp.obstacle == "Player" or rayRight.obstacle == "Player" or rayDown.obstacle == "Player" or rayLeft.obstacle == "Player" and canAttack and player.alive and not player.isAttacked and player.get_pos() != Vector2(208, 64):
@@ -144,7 +147,7 @@ func movement(x):
 		#States that the player is no longer being attacked
 		player.isAttacked = false
 
-func move():
+func moveRand():
 	######THE ENEMY'S MOVEMENT################################
 	#TYPE: RANDOM
 	randomize()
@@ -215,7 +218,37 @@ func move():
 			direction = Vector2(0,0)
 
 	newPos = (pos + (direction * 32))
-	print("Direction: " + str(direction))
+	#print("Direction: " + str(direction))
+
+func moveStalk(pos, playerPos):
+	######THE ENEMY'S MOVEMENT################################
+	#TYPE: STALK THE PLAYER
+	print("Enemy pos: " + str(pos))
+	print("Player pos: " + str(playerPos))
+
+	#If the enemy is adjacent to the player: he will not move and instead will attack the player
+	if rayUp.obstacle == "Player" or rayRight.obstacle == "Player" or rayDown.obstacle == "Player" or rayLeft.obstacle == "Player":
+		direction = Vector2(0, 0)
+
+	#If the player is above the enemy, the enemy will move up
+	elif playerPos.y < pos.y and rayUp.obstacle == "none":
+		#Sets the direction in which the enemy will move
+		direction = UP
+	#If the player is below the enemy, the enemy will move down
+	elif playerPos.y > pos.y and rayDown.obstacle == "none":
+		direction = DOWN
+	#If the player is to the left of the enemy, the enemy will move left
+	elif playerPos.x < pos.x and rayLeft.obstacle == "none":
+		direction = LEFT
+	#If the player is to the right of the enemy, the enemy will move right
+	elif playerPos.x > pos.x and rayRight.obstacle == "none":
+		direction = RIGHT
+	#If the enemy is stuck he won't move - prevents the game from crashing!
+	else:
+		direction = Vector2(0, 0)
+	
+	#Actually moves the enemy in the designated direction
+	newPos = (pos + (direction * 32))
 
 func attack():
 	anim.play("Attack")

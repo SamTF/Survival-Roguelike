@@ -36,7 +36,7 @@ script/script = ExtResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 48, 208 )
+transform/pos = Vector2( 32, 192 )
 
 [node name="Exit" parent="." instance=ExtResource( 5 )]
 

@@ -65,7 +65,7 @@ texture = ExtResource( 2 )
 centered = false
 vframes = 7
 hframes = 8
-frame = 43
+frame = 6
 region_rect = Rect2( 256, 224, 32, 32 )
 
 [node name="Anim" type="AnimationPlayer" parent="Sprite"]

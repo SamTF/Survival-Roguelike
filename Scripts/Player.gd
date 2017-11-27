@@ -43,7 +43,7 @@ var newPos = Vector2(0,0)
 
 #MOVEMENT VARIABLES
 var canMove = true
-var canAttack = true
+var playerCanAttack = true
 var isMoving = false
 var isAttacked = false
 var alive = true
@@ -137,13 +137,11 @@ func _fixed_process(delta):
 			elif rayUp.obstacle == "Food":
 				#Calls the "walkFood" function with the direction UP
 				walkFood(UP)
-			#If the item is a wall, the player hits it
+			#If the obstacle is a wall or an enemy, the player hits it
 			elif rayUp.obstacle == "Wall":
-				#Calls the "mine" function with the object hit by the raycast - a wall
-				mine(raycastUp)
-			#If the obstacle is an enemy, attack him
-			elif rayUp.obstacle == "Enemy" and canAttack:
-				#Calls the "attack" function with the object hit by the raycast - an enemy
+				attack(raycastUp)
+			elif rayUp.obstacle == "Enemy" and playerCanAttack:
+				#Calls the "attack" function with the object the raycast hit if the player can attack
 				attack(raycastUp)
 			#if the path is blocked, print what blocked the path
 			else:
@@ -160,9 +158,9 @@ func _fixed_process(delta):
 				walkFood(DOWN)
 			#Wall
 			elif rayDown.obstacle == "Wall":
-				mine(raycastDown)
+				attack(raycastDown)
 			#Enemy
-			elif rayDown.obstacle == "Enemy" and canAttack:
+			elif rayDown.obstacle == "Enemy" and playerCanAttack:
 				attack(raycastDown)
 			#Else
 			else:
@@ -179,9 +177,9 @@ func _fixed_process(delta):
 				walkFood(LEFT)
 			#Wall
 			elif rayLeft.obstacle == "Wall":
-				mine(raycastLeft)
+				attack(raycastLeft)
 			#Enemy	
-			elif rayLeft.obstacle == "Enemy" and canAttack:
+			elif rayLeft.obstacle == "Enemy" and playerCanAttack:
 				attack(raycastLeft)
 			#Else
 			else:
@@ -198,9 +196,9 @@ func _fixed_process(delta):
 				walkFood(RIGHT)
 			#Wall
 			elif rayRight.obstacle == "Wall":
-				mine(raycastRight)
+				attack(raycastRight)
 			#Enemy
-			elif rayRight.obstacle == "Enemy" and canAttack:
+			elif rayRight.obstacle == "Enemy" and playerCanAttack:
 				attack(raycastRight)
 			#Else
 			else:
@@ -257,24 +255,17 @@ func walkFood(direction):
 	#Plays the movement sound from the AudioPlayer
 	AudioPlayer.play("scavengers_footstep")
 
-#Mining - When the player hits a wall block - it breaks down the block until it's finally destroyed
-func mine(object):
-	Game.food -= 1
-	#Emits a signal to update the food label
-	emit_signal("foodChanged", Game.food)
-	#Plays the player's chopping animation
-	anim.play("Attack")
-	#Tells the object hit by the raycast in question to call the dakeDamage func
-	object.takeDamage()
-	#Plays the chopping sound from the AudioPlayer
-	AudioPlayer.play("scavengers_chop")
-	#Shakes the screen a bit - very immersive!
-	get_tree().call_group(0, "Camera", "shake", 1, 0.13)
-
-#Attack - when the player hits an enemy - same as above without eating food
+#Attack - when the player hits an object (either a wall or an enemy)
 func attack(object):
+	#if the object is a wall, then the player consumes food to attack it
+	if object.is_in_group("tileWalls"):
+		Game.food -= 1
+		#Emits a signal to update the food label
+		emit_signal("foodChanged", Game.food)
+
 	#The player can't attack again until the current attack is finished - prevents the player from attacking twice before the enemy can react
-	canAttack = false
+	playerCanAttack = false
+
 	#plays the attack animation
 	anim.play("Attack")
 	#calls the takeDamage func on the enemy
@@ -285,8 +276,7 @@ func attack(object):
 	get_tree().call_group(0, "Camera", "shake", 1, 0.13)
 	#Waits one second before reseting the player's ability to attack
 	yield(utils.create_timer(1), "timeout")
-	canAttack = true
-
+	playerCanAttack = true
 
 #Ray functions for each directional ray
 #specifying the is_colliding, the get_collider, and the ray itself

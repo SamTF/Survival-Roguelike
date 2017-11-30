@@ -36,10 +36,10 @@ func _ready():
 	genFloor()
 	genOuterWalls()
 	genUnits()
-	genWalls(round(rand_range(8, 12)))
-	genItems(round(rand_range(0, 3)))
+	genWalls(round(rand_range(6, 12)))
+	genItems(round(rand_range(1, 3)))
 	genEnemies(difficulty)
-	#print(exp(1)) #USE THIS TO SCALE DIFFICULTY
+	#print(exp(1)) #USE THIS TO SCALE DIFFICULTY MORE HARSHLY
 
 func genFloor():
 	randomize()
@@ -80,7 +80,9 @@ func genUnits():
 			if not (x == 1 and y == 6) and not (x == 6 and y == 1):
 				#Doesn't add the (1,5) pos or the (2, 6) because those are right next to the spawn
 				if not (x == 1 and y == 5) and not (x == 2 and y == 6):
-					gridPositions.append(Vector2(x,y))
+					#Doesn't add the (5,1) or the (6, 2) pos because those are right next to the exit
+					if not (x == 5 and y == 1) and not (x == 6 and y == 2):
+						gridPositions.append(Vector2(x,y))
 
 #This func is used to randomly generate the walls
 func genWalls(x):
@@ -104,7 +106,16 @@ func genItems(x):
 	var itemInst													#creates a var to store the item instance
 	for item in range(0, x):
 		
-		itemInst = food.instance()
+		#Chance for each type of enemy to show up
+		var itemID = round(rand_range(1,4))
+		
+		#25% chance of the item being a weapon
+		if itemID == 1:
+			itemInst = weapon.instance()
+		#75% chance of the item being food
+		else:
+			itemInst = food.instance()
+			
 		var randomIndex = rand_range(0, gridPositions.size())		#the index of the pos from the gridPositions array
 		var pos = gridPositions[randomIndex]						#sets the enemy's pos to the random pos from the grid array
 		gridPositions.remove(randomIndex)							#removes said array to prevent spawning two enemies in one tile

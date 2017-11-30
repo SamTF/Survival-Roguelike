@@ -13,28 +13,45 @@ var weaponPickaxe = {
     dmg = 1,			#the damage it does to enemies
     mine = 1,			#the mining damage - damage to blocks
     rng = 1,			#its range
-    dur = 30			#its durability - how many times it can be used before it breaks
+    speed = 1,			#attack cooldown (the slower the better)
+    dur = 50,			#its maximum durability - how many times it can be used before it breaks
+    Cdur = 50			#the Current durability of the weapon
 }
 var weaponKnife = {
     name = "knife",
     dmg = 1,
-    mine = 0.5,
+    mine = 1,
     rng = 1,
-    dur = 10
+    speed = 0.01,
+    dur = 20,
+    Cdur = 20
 }
 var weaponMachete = {
     name = "machete",
     dmg = 2,
-    mine = 0.5,
+    mine = 0.2,
     rng = 1,
-    dur = 10
+    speed = 1,
+    dur = 20,
+    Cdur = 20
 }
 var weaponCrossbow = {
     name = "crossbow",
     dmg = 1,
     mine = 0,
     rng = 5,
-    dur = -1
+    speed = 1,
+    dur = 10,
+    Cdur = 10
+}
+var weaponEmpty = {
+    name = "none",
+    dmg = 0,
+    mine = 0,
+    rng = 0,
+    speed = 0,
+    dur = 0,
+    Cdur = 0
 }
 #A database of all weapons
 var weaponDB = [weaponPickaxe, weaponKnife, weaponMachete, weaponCrossbow]

@@ -274,8 +274,12 @@ func attack(object):
 	AudioPlayer.play("scavengers_chop")
 	#Shakes the screen a bit - very immersive!
 	get_tree().call_group(0, "Camera", "shake", 1, 0.13)
-	#Waits one second before reseting the player's ability to attack
-	yield(utils.create_timer(1), "timeout")
+	#Decreases the weapon's current durability by one
+	Game.playerWeapon.Cdur -= 1
+	#Updates the weapon label on the UI
+	get_tree().call_group(0, "UI", "_on_weapon_Attack")
+	#Waits before reseting the player's ability to attack depending on the current weapon's speed
+	yield(utils.create_timer(Game.playerWeapon.speed), "timeout")
 	playerCanAttack = true
 
 #Ray functions for each directional ray
@@ -297,7 +301,7 @@ func raycastFunc(x, y, z):
 		elif y.is_in_group("Food"):
 			z.obstacle = "Food"
 		elif y.is_in_group("Weapons"):
-			z.obstacle = "Weapon"
+			z.obstacle = "none"
 	
 	#if it hasn't collided with anything, the obstacle is set to none
 	else:

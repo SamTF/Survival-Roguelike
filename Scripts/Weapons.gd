@@ -15,6 +15,8 @@ func _ready():
 	#sets the weapon class to match the sprite's frame
 	weaponItem = Game.weaponDB[frameID]
 	print(weaponItem)
+	
+	set_fixed_process(true)
 
 func _on_area_enter( area ):
 	print("AAAAAAAAAAAAAAAA")
@@ -23,7 +25,10 @@ func _on_area_enter( area ):
 
 		#adds the new weapon to the player
 		Game.playerWeapon = weaponItem
+		print(Game.playerWeapon.name)
 		#Tells the sprite to play the pickup animation
 		anim.play("pickup")
+		#Updates the weapon name in the UI
+		get_tree().call_group(0, "UI", "_on_weapon_Changed")
 		#destroys the hitbox to prevent the func from triggering multiple times
 		hitbox.queue_free()

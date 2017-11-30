@@ -5,6 +5,8 @@ extends Node2D
 onready var foodText = get_node("LabelFood")
 #Loads the current level label
 onready var currLevelText = get_node("LabelCurrentLevel")
+#Loads the weapon label
+onready var weaponText = get_node("LabelWeapon")
 #Loads the Health sprite
 onready var health = get_node("Health")
 #Loads the Log label
@@ -24,6 +26,7 @@ func _ready():
 	foodText.set_text("Food: " + str(Game.food))
 	health.set_frame(Game.playerHP - 1)
 	currLevelText.set_text("day: " + str(Game.level))
+	weaponText.set_text(Game.playerWeapon.name)
 
 #Everytime the food value is changed, the text is updated
 func _on_Player_foodChanged(food):
@@ -41,8 +44,16 @@ func on_PlayerHP_Changed(HP):
 
 #Triggers when the player changes level
 func _on_level_Changed(day):
-	print("LEVEL CHANGED")
 	currLevelText.set_text("day: " + str(day))
+
+#Triggers when the player changes weapon
+func _on_weapon_Changed():
+	weaponText.set_text(Game.playerWeapon.name)
+
+#Triggers when the player attacks - changes the opacity based on the current durability
+func _on_weapon_Attack():
+	var opacityWeapon = float(Game.playerWeapon.Cdur)/float(Game.playerWeapon.dur)
+	weaponText.set_opacity(opacityWeapon)
 
 #Sets the death messages
 func deathScreen(x, y):

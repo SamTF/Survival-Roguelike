@@ -36,6 +36,7 @@ var moveRight
 var moveDown
 var moveLeft
 var eat
+var use
 
 #POSITION VARIABLES
 var pos = Vector2(0,0)
@@ -276,6 +277,11 @@ func attack(object):
 	get_tree().call_group(0, "Camera", "shake", 1, 0.13)
 	#Decreases the weapon's current durability by one
 	Game.playerWeapon.Cdur -= 1
+	#Breaks the weapon if the durability has reached 0
+	if Game.playerWeapon.Cdur < 1:
+		#sets the weapon to "none"
+		Game.playerWeapon = Game.weaponDB[4]
+		get_tree().call_group(0, "UI", "_on_weapon_Changed")
 	#Updates the weapon label on the UI
 	get_tree().call_group(0, "UI", "_on_weapon_Attack")
 	#Waits before reseting the player's ability to attack depending on the current weapon's speed
@@ -322,6 +328,10 @@ func die(x):
 	var CoD = x
 	#Days survived is the current game level
 	var daysSurvived = Game.level
+	#Updates the highscore is the current score is bigger than the highscore
+	if daysSurvived > Game.highscore:
+		Game.highscore = daysSurvived
+		Game.saveHighscore()
 	#This calls the "deathScreen" function on the UI node, printing the Cause of Death and the days survived
 	get_tree().call_group(0, "UI", "deathScreen", CoD, daysSurvived)
 	#this yield is used to prevent the game from crashing

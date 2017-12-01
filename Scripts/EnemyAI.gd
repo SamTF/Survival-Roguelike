@@ -92,7 +92,7 @@ func raycastFunc(x, y, z):
 		elif y.is_in_group("Player"):
 			z.obstacle = "Player"
 		elif y.is_in_group("Food"):
-			z.obstacle = "Food"
+			z.obstacle = "none"		#enemies ignore food and can walk thru it
 		elif y.is_in_group("Exit"):
 			z.obstacle = "Exit"
 		elif y.is_in_group("enemy"):
@@ -263,8 +263,7 @@ func takeDamage():
 	AudioPlayer.play("scavengers_enemy")
 	#if the enemy's HP is bigger than 0 it fades a bit
 	if health > 0:
-		set_opacity(0.5)
+		set_opacity(health/2.0)
 	#if it's 0 or less then the enemy is deleted
 	else:
 		queue_free()
-	print(health)

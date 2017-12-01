@@ -37,7 +37,8 @@ func _ready():
 	genOuterWalls()
 	genUnits()
 	genWalls(round(rand_range(6, 12)))
-	genItems(round(rand_range(1, 3)))
+	genFood(round(rand_range(0, 3)))
+	genWeapons()
 	genEnemies(difficulty)
 	#print(exp(1)) #USE THIS TO SCALE DIFFICULTY MORE HARSHLY
 
@@ -100,29 +101,37 @@ func genWalls(x):
 		
 		#OUTDATED: NEEDS TO BE INSTANCE - wallTiles.set_cellv(pos, rand_range(0,7)) #set_cellv(Vector, ID) is used to add a tile to the game
 
-#This func is used to randomly generate items based on the current difficulty
-func genItems(x):
-	#the X is a random num based on the difficulty
-	var itemInst													#creates a var to store the item instance
+#This func is used to randomly generate the food items
+func genFood(x):
+	var foodInst													#creates a var to store the item instance
 	for item in range(0, x):
 		
-		#Chance for each type of enemy to show up
-		var itemID = round(rand_range(1,4))
-		
-		#25% chance of the item being a weapon
-		if itemID == 1:
-			itemInst = weapon.instance()
-		#75% chance of the item being food
-		else:
-			itemInst = food.instance()
-			
+		foodInst = food.instance()
 		var randomIndex = rand_range(0, gridPositions.size())		#the index of the pos from the gridPositions array
 		var pos = gridPositions[randomIndex]						#sets the enemy's pos to the random pos from the grid array
 		gridPositions.remove(randomIndex)							#removes said array to prevent spawning two enemies in one tile
 		var posOnGrid = Vector2(pos.x*32, pos.y*32)					#converts from grid position to global position
-		itemInst.set_pos(posOnGrid)
-		add_child(itemInst)
- 
+		foodInst.set_pos(posOnGrid)
+		add_child(foodInst)
+
+#this func is used to randomly generate the weapons, if any
+func genWeapons():
+	var weaponInst													#creates a var to store the item instance
+
+	#Chance for a weapon to spawn
+	var spawnWeapon = round(rand_range(1,3))
+	
+	#25% chance of the item being a weapon
+	if spawnWeapon != 1: return
+	else:
+		weaponInst = weapon.instance()
+		var randomIndex = rand_range(0, gridPositions.size())		#the index of the pos from the gridPositions array
+		var pos = gridPositions[randomIndex]						#sets the enemy's pos to the random pos from the grid array
+		gridPositions.remove(randomIndex)							#removes said array to prevent spawning two enemies in one tile
+		var posOnGrid = Vector2(pos.x*32, pos.y*32)					#converts from grid position to global position
+		weaponInst.set_pos(posOnGrid)
+		add_child(weaponInst)
+
 #This func is used to randomly generate enemies based on the current difficulty
 func genEnemies(x):
 	#the X is the difficulty log based on the current level

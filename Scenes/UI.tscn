@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=1]
+[gd_scene load_steps=15 format=1]
 
 [ext_resource path="res://Scripts/UI.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/5₧5.ttf" type="DynamicFontData" id=2]
@@ -27,9 +27,15 @@ font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 2 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="DynamicFont" id=4]
 
-resource/name = "fadeOut"
+font/size = 10
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 2 )
+
+[sub_resource type="Animation" id=5]
+
 length = 6.0
 loop = false
 step = 0.1
@@ -54,13 +60,6 @@ tracks/1/keys = {
 "values": [ true ]
 }
 
-[sub_resource type="DynamicFont" id=5]
-
-font/size = 10
-font/use_mipmaps = false
-font/use_filter = false
-font/font = ExtResource( 2 )
-
 [sub_resource type="DynamicFont" id=6]
 
 font/size = 10
@@ -68,9 +67,22 @@ font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 2 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="DynamicFont" id=7]
 
-resource/name = "Flash"
+font/size = 10
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+
+font/size = 10
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 2 )
+
+[sub_resource type="Animation" id=8]
+
 length = 0.2
 loop = false
 step = 0.05
@@ -164,6 +176,23 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="LabelWeapon" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 200.0
+margin/top = 232.0
+margin/right = 248.0
+margin/bottom = 246.0
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "pickaxe"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="Health" type="Sprite" parent="."]
 
 transform/pos = Vector2( 8, 8 )
@@ -182,9 +211,13 @@ margin/left = 8.0
 margin/top = 8.0
 margin/right = 48.0
 margin/bottom = 48.0
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="BlackScreen" type="Sprite" parent="Death Screen"]
 
+editor/display_folded = true
 visibility/opacity = 0.0
 transform/pos = Vector2( -8, -8 )
 texture = ExtResource( 4 )
@@ -195,7 +228,7 @@ centered = false
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/fadeOut = SubResource( 4 )
+anims/fadeOut = SubResource( 5 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
@@ -211,7 +244,7 @@ margin/left = -8.0
 margin/top = 96.0
 margin/right = 248.0
 margin/bottom = 118.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
@@ -229,10 +262,27 @@ margin/left = -8.0
 margin/top = 136.0
 margin/right = 248.0
 margin/bottom = 150.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="LabelHighscore" type="Label" parent="Death Screen"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 64.0
+margin/top = 168.0
+margin/right = 173.0
+margin/bottom = 182.0
+custom_fonts/font = SubResource( 9 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
@@ -247,6 +297,9 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 40.0
 margin/bottom = 40.0
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Claws" type="Sprite" parent="Attacked"]
 
@@ -263,7 +316,7 @@ modulate = Color( 1, 0, 0, 1 )
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/Flash = SubResource( 7 )
+anims/Flash = SubResource( 8 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
